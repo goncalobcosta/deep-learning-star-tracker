@@ -1,0 +1,57 @@
+run: run5_expD_all_rawmag
+started_at_utc: 2026-04-06T07:22:35+00:00
+ended_at_utc: 2026-04-06T08:11:22+00:00
+duration_seconds: 2927.00
+
+parameters:
+  stop_mode: appear_band_target
+  scene_budget: 3174480
+  max_accepted_scenes: None
+  appear_target: 16823
+  appear_target_semantics: band_over_scoped_stars
+  appear_band_target_mean: 16823.117486958494
+  appear_band_margin: 500.0
+  appear_band_lower: 16323.117486958494
+  appear_band_upper: 17323.117486958494
+  appear_band_required_min_count: 16324
+  appear_band_allowed_max_count: 17323
+  appear_cap: None
+  appear_cap_margin: 0.0
+  baseline_run: C:\Users\User\Desktop\tudo\feup\mestrado\tese\tetra4\synth_dataset\runs_tmp_validation\run1
+  fov_diagonal_deg: 21.0
+  fov_horizontal_deg: 17.2
+  fov_vertical_deg: 13.0
+  magnitude_cutoff: 8.0
+  magnitude_perturb_mean: 0.0
+  magnitude_perturb_sigma: 0.0
+  resolution: [1280, 960]
+  chunk_size_mb: 256
+  num_workers: 1
+  seed: 577215227560855758
+  timelapse: False
+  timelapse_ra_window_deg: [150.0, 180.0]
+  timelapse_dec_window_deg: [-90.0, 90.0]
+  timelapse_require_full_fov_inside: False
+  timelapse_fov_edge_samples: 24
+  timelapse_plot_ra_window_deg: [None, None]
+  timelapse_plot_dec_window_deg: [None, None]
+  eligible_stars_in_window: 8818
+  eligible_stars_in_ra_window: 8818
+  every_nth_scene: 1
+
+counts:
+  generated_scene_count: 3265893
+  chunks_count: 11
+  total_points: 154885805
+  total_real_points: 146722572
+  total_false_points: 8163233
+  total_dropout_count: 8164829
+  attempted_scene_count: 3266135
+  discarded_by_cap_count: 242
+  discarded_empty_count: 0
+  discarded_by_ra_count: 0
+  appear_count_min: 16324
+  appear_count_mean: 16638.985257427987
+  appear_count_max: 17323
+  unique_seen_stars: 8818
+  total_appearances: 146722572

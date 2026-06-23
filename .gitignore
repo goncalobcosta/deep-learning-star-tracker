@@ -1,0 +1,49 @@
+# Documents
+/docs/_*
+/docs/*.log
+
+# Cache
+*__pycache__*
+*.pyc
+.DS_Store
+
+# Debug logs
+**/debug/*
+
+# Builds
+/build/*
+/dist/*
+*egg-info*
+
+# Settings
+/setup.cfg
+
+# Star catalogue
+/BSC5*
+
+# Databases except the default
+*.npz
+!**/default_database.npz
+
+# Generated runs and training artifacts
+/artifacts/
+/results/real_image_comparison/
+/GNN/runs/*
+!/GNN/runs/Deucalion_runs/
+/GNN/runs/Deucalion_runs/*
+!/GNN/runs/Deucalion_runs/testes_gnn_v2/
+!/GNN/runs/Deucalion_runs/testes_gnn_v2/**
+/NN/runs/
+/synth_dataset/runs/
+/GNN/split/runs/
+/imgs_extras/*
+synth_dataset/sky_plots_per_scene_test/*
+synth_dataset/runs_tmp_validation/*
+
+# Generated learning-curve intermediates. Keep only the curated slide-ready set.
+/synth_dataset/plots/learning_curves/*
+!/synth_dataset/plots/learning_curves/_slides_ready_workplan8/
+!/synth_dataset/plots/learning_curves/_slides_ready_workplan8/**
+
+/synth_dataset/runs_1000ms_18-50_subset/run1/sky_plots/
+/synth_dataset/runs_1000ms_18-50_subset/run1/sky_plots_timelapse.mp4

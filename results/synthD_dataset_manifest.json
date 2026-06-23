@@ -1,0 +1,159 @@
+{
+  "run": {
+    "name": "run5_expD_all_rawmag",
+    "run_index": 5,
+    "created_at_utc": "2026-04-06T07:22:35+00:00",
+    "finished_at_utc": "2026-04-06T08:11:22+00:00",
+    "database_path": "C:\\Users\\User\\Desktop\\tudo\\feup\\mestrado\\tese\\tetra4\\tetra3\\data\\default_database.npz",
+    "database_star_count": 8818,
+    "parameters": {
+      "stop_mode": "appear_band_target",
+      "scene_budget": 3174480,
+      "max_accepted_scenes": null,
+      "appear_target": 16823,
+      "appear_target_semantics": "band_over_scoped_stars",
+      "appear_band_target_mean": 16823.117486958494,
+      "appear_band_margin": 500.0,
+      "appear_band_lower": 16323.117486958494,
+      "appear_band_upper": 17323.117486958494,
+      "appear_band_required_min_count": 16324,
+      "appear_band_allowed_max_count": 17323,
+      "appear_cap": null,
+      "appear_cap_margin": 0.0,
+      "baseline_run": "C:\\Users\\User\\Desktop\\tudo\\feup\\mestrado\\tese\\tetra4\\synth_dataset\\runs_tmp_validation\\run1",
+      "fov_diagonal_deg": 21.0,
+      "fov_horizontal_deg": 17.2,
+      "fov_vertical_deg": 13.0,
+      "magnitude_cutoff": 8.0,
+      "magnitude_perturb_mean": 0.0,
+      "magnitude_perturb_sigma": 0.0,
+      "resolution": [
+        1280,
+        960
+      ],
+      "chunk_size_mb": 256,
+      "num_workers": 1,
+      "seed": 577215227560855758,
+      "timelapse": false,
+      "timelapse_ra_window_deg": [
+        150.0,
+        180.0
+      ],
+      "timelapse_dec_window_deg": [
+        -90.0,
+        90.0
+      ],
+      "timelapse_require_full_fov_inside": false,
+      "timelapse_fov_edge_samples": 24,
+      "timelapse_plot_ra_window_deg": [
+        null,
+        null
+      ],
+      "timelapse_plot_dec_window_deg": [
+        null,
+        null
+      ],
+      "eligible_stars_in_window": 8818,
+      "eligible_stars_in_ra_window": 8818,
+      "every_nth_scene": 1
+    }
+  },
+  "guide_star_indices": null,
+  "guide_star_catalog_ids": null,
+  "counts": {
+    "generated_scene_count": 3265893,
+    "chunks_count": 11,
+    "total_points": 154885805,
+    "total_real_points": 146722572,
+    "total_false_points": 8163233,
+    "total_dropout_count": 8164829,
+    "attempted_scene_count": 3266135,
+    "discarded_by_cap_count": 242,
+    "discarded_empty_count": 0,
+    "discarded_by_ra_count": 0,
+    "appear_count_min": 16324,
+    "appear_count_mean": 16638.985257427987,
+    "appear_count_max": 17323,
+    "unique_seen_stars": 8818,
+    "total_appearances": 146722572
+  },
+  "chunks": [
+    {
+      "chunk_index": 1,
+      "file": "dataset/dataset1.npz",
+      "scene_count": 309925,
+      "point_count": 15097564,
+      "size_bytes": 161140388
+    },
+    {
+      "chunk_index": 2,
+      "file": "dataset/dataset2.npz",
+      "scene_count": 310698,
+      "point_count": 15095845,
+      "size_bytes": 161176797
+    },
+    {
+      "chunk_index": 3,
+      "file": "dataset/dataset3.npz",
+      "scene_count": 311233,
+      "point_count": 15094627,
+      "size_bytes": 161205902
+    },
+    {
+      "chunk_index": 4,
+      "file": "dataset/dataset4.npz",
+      "scene_count": 312236,
+      "point_count": 15092396,
+      "size_bytes": 161220420
+    },
+    {
+      "chunk_index": 5,
+      "file": "dataset/dataset5.npz",
+      "scene_count": 313399,
+      "point_count": 15089786,
+      "size_bytes": 161239170
+    },
+    {
+      "chunk_index": 6,
+      "file": "dataset/dataset6.npz",
+      "scene_count": 314588,
+      "point_count": 15087130,
+      "size_bytes": 161295559
+    },
+    {
+      "chunk_index": 7,
+      "file": "dataset/dataset7.npz",
+      "scene_count": 316530,
+      "point_count": 15082811,
+      "size_bytes": 161323145
+    },
+    {
+      "chunk_index": 8,
+      "file": "dataset/dataset8.npz",
+      "scene_count": 319366,
+      "point_count": 15076493,
+      "size_bytes": 161349265
+    },
+    {
+      "chunk_index": 9,
+      "file": "dataset/dataset9.npz",
+      "scene_count": 324060,
+      "point_count": 15065983,
+      "size_bytes": 161335156
+    },
+    {
+      "chunk_index": 10,
+      "file": "dataset/dataset10.npz",
+      "scene_count": 337062,
+      "point_count": 15036892,
+      "size_bytes": 161076642
+    },
+    {
+      "chunk_index": 11,
+      "file": "dataset/dataset11.npz",
+      "scene_count": 96796,
+      "point_count": 4066278,
+      "size_bytes": 43437054
+    }
+  ]
+}

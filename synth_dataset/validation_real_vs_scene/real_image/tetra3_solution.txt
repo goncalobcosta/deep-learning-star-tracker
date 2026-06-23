@@ -1,0 +1,16 @@
+label: real_image
+image: C:\Users\User\Desktop\tudo\feup\mestrado\tese\tetra4\imgs_extras\imgs_teste\1000ms_18-50\1000ms_18-50-26-712529.tiff
+image_size: 1280x960
+centroid_count: 78
+solver_params: distortion=0, return_matches=True, return_visual=True
+ra_deg: 12.022799518320715
+dec_deg: 61.371208780978705
+roll_deg: 133.05118354355776
+fov_horizontal_deg: 16.903932582400977
+distortion: 0.009171611866037745
+rmse_arcsec: 21.06372909018724
+matches: 20
+prob_false_positive: 2.002812674960325e-31
+t_solve_ms: 2.398900000116555
+t_extract_ms: 66.2704000001213
+visual_png: C:\Users\User\Desktop\tudo\feup\mestrado\tese\tetra4\synth_dataset\ValidaçãoDataset_ImgReal_vs_Cena\real_image\tetra3_visual.png

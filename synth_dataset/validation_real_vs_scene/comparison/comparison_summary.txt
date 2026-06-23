@@ -1,0 +1,26 @@
+Tetra3 real image vs simulated scene
+
+Solver params: distortion=0, return_matches=True, return_visual=True
+
+Real image:
+  RA=12.022799518320715 Dec=61.371208780978705 Roll=133.05118354355776
+  FOV=16.903932582400977 distortion=0.009171611866037745
+  Matches=20 RMSE=21.06372909018724 arcsec Prob=2.002812674960325e-31
+
+Simulated scene:
+  RA=12.176936110642702 Dec=61.35671949858078 Roll=119.02637349796846
+  FOV=17.18294383170501 distortion=0.001950193204857335
+  Matches=27 RMSE=38.824213799221624 arcsec Prob=7.360367202278389e-52
+
+Real vs scene:
+  Angular separation=0.07527662520227653 deg
+  Roll difference=14.024810045589277 deg
+  FOV horizontal difference=0.279011249304034 deg
+  Shared catalog IDs=20
+  Real-only catalog IDs=0
+  Scene-only catalog IDs=7
+
+Scene Tetra3 vs scene metadata:
+  scene_idx=57961
+  Angular separation=0.0025765908400200302 deg
+  Roll difference=0.02637349796845001 deg

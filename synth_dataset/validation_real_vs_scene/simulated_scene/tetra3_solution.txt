@@ -1,0 +1,16 @@
+label: simulated_scene
+image: C:\Users\User\Desktop\tudo\feup\mestrado\tese\tetra4\synth_dataset\runs\1000ms_18-50_subset_run1\run1\best_scene_match\preview_raw\scene_00057961_guide000062_roll119.png
+image_size: 1280x960
+centroid_count: 75
+solver_params: distortion=0, return_matches=True, return_visual=True
+ra_deg: 12.176936110642702
+dec_deg: 61.35671949858078
+roll_deg: 119.02637349796846
+fov_horizontal_deg: 17.18294383170501
+distortion: 0.001950193204857335
+rmse_arcsec: 38.824213799221624
+matches: 27
+prob_false_positive: 7.360367202278389e-52
+t_solve_ms: 2.9497999998966407
+t_extract_ms: 69.90519999999378
+visual_png: C:\Users\User\Desktop\tudo\feup\mestrado\tese\tetra4\synth_dataset\ValidaçãoDataset_ImgReal_vs_Cena\simulated_scene\tetra3_visual.png

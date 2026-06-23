@@ -1,0 +1,77 @@
+name: final_r3_synthd
+description: Final thesis configuration for Tetra3+GNN candidate generation.
+
+seed: 12345
+
+dataset:
+  database: tetra3/data/default_database.npz
+  catalog_stars: 8818
+  resolution_px: [1280, 960]
+  fov_deg:
+    horizontal: 17.2
+    vertical: 13.0
+    diagonal: 21.0
+  reference_strategy:
+    script: synth_dataset/generate_dataset_baseline.py
+    guide_stars: 0
+    num_repeats: 1
+    instrument_coverage: true
+    seed: 6353103531848264806
+    expected_scenes: 3174480
+  synthd_strategy:
+    script: synth_dataset/generate_dataset_aletorio.py
+    stop_mode: appear_band_target
+    appear_band_margin: 500
+    baseline_run: required
+    seed: 577215227560855758
+    expected_scenes: 3265893
+    expected_coverage:
+      min: 16324
+      mean: 16639
+      max: 17323
+      range: 999
+  perturbations:
+    false_detections_per_scene: [0, 5]
+    dropped_real_stars_per_scene: [0, 5]
+    positional_noise_px: [0.25, 1.0]
+    magnitude_perturb_mean: 0.0
+    magnitude_perturb_sigma: 0.0
+
+split:
+  script: GNN/split/split.py
+  train_frac: 0.8
+  val_frac: 0.1
+  test_frac: 0.1
+  mode: closed_set_by_scene_within_guide_star
+
+gnn:
+  script: GNN/GNN.py
+  regime: R3_top4_to_top8
+  top_n_choices: [4, 5, 6, 7, 8]
+  top_n_mode: expand
+  graph_connectivity: fully
+  max_neighbors: 7
+  model_backbone: edge_mlp
+  hidden_dim: 512
+  num_layers: 5
+  dropout: 0.2
+  node_feature_mode: none
+  edge_feature_mode: distance_diagonal
+  loss_group_by_scene: true
+  optimizer: AdamW
+  lr: 0.001
+  weight_decay: 0.00001
+  grad_clip_norm: 1.0
+  early_stop_monitor: val_loss
+  early_stop_patience: 40
+  batch_size_scenes_full: 2048
+  batch_size_scenes_smoke: 128
+
+integration:
+  script: scripts/compare_tetra_vs_gnn_batch.py
+  mode: anchor_pair_search
+  M_brightest_centroids: 8
+  N_anchor_centroids: 8
+  K_candidates_per_anchor: 10
+  B_geometric_verification_budget: 65
+  real_images_note: The 147 real star-tracker images are proprietary and are not required for the public smoke test.
