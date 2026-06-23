@@ -165,8 +165,7 @@ Chapter 4 of the dissertation.
   the reference mean ± 500 appearances (Section 4.2.8).
 - Per-scene perturbations: 0–5 false detections, 0–5 dropped real stars, and a
   per-point positional uncertainty between 0.25 and 1.0 px (Section 4.2.7).
-- `point_magnitude` stores the catalogue magnitude; magnitude perturbation is
-  disabled in the final dataset (hence the run name `run5_expD_all_rawmag`).
+- `point_magnitude` stores the catalogue magnitude;
 - Seeds: split/training `12345`; star-centred reference `6353103531848264806`;
   `synthD` `577215227560855758`.
 
