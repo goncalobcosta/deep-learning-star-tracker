@@ -4,7 +4,7 @@
 > Supervisors: Prof. Paulo Jorge Valente Garcia · Prof. Jaime dos Santos Cardoso
 
 <p align="center">
-  <img src="assets/gnn_node_classification_concept_v2.png" width="760" alt="Star identification framed as node classification: detected centroids form a graph, and a GNN assigns each node its catalogue star.">
+  <img src="assets/concept.png" width="760" alt="Star identification framed as node classification: detected centroids form a graph, and a GNN assigns each node its catalogue star.">
 </p>
 
 This repository contains the code, configuration and result artifacts for a
@@ -36,7 +36,7 @@ processing reduces the raw frame to a brightness-ordered set of detected
 centroids — the starting point of this work.
 
 <p align="center">
-  <img src="assets/image_processing_pipeline.png" width="760" alt="Image processing converts the raw sensor frame into a brightness-ordered set of centroid measurements.">
+  <img src="assets/pipeline.png" width="760" alt="Image processing converts the raw sensor frame into a brightness-ordered set of centroid measurements.">
 </p>
 
 Profiling the classical Tetra3 on real images shows that, after centroid
@@ -57,34 +57,38 @@ of view, with realistic per-scene perturbations (0–5 false detections, 0–5
 dropped stars, sub-pixel positional noise).
 
 <p align="center">
-  <img src="assets/synthetic_scene_example.png" width="370" alt="Annotated synthetic scene on the sensor plane.">
+  <img src="assets/synthetic_scene.png" width="370" alt="Annotated synthetic scene on the sensor plane.">
   &nbsp;&nbsp;
-  <img src="assets/tetra_catalog_map_redondo.png" width="370" alt="The 8818-star Tetra3 catalogue on a sky projection.">
+  <img src="assets/catalog_map.png" width="370" alt="The 8818-star Tetra3 catalogue on a sky projection.">
 </p>
 
 Boresights are drawn uniformly over the celestial sphere, and a coverage band
 caps already-frequent stars. This collapses the catalogue-coverage imbalance by
-more than an order of magnitude (range `17214 → 999`), so every star is learned
-roughly equally often.
-
-<p align="center">
-  <img src="assets/dataset_coverage_ranges.png" width="620" alt="Catalogue coverage range: star-centred reference vs the final balanced dataset.">
-</p>
+more than an order of magnitude (coverage range `17214 → 999`, Table 5.1), so
+every star is learned roughly equally often.
 
 ### 2 · Identification as node classification
 
 Detected centroids become graph **nodes**; their pairwise geometry becomes
-**edges**; the GNN labels each node with a catalogue star. The network is
-deliberately minimal — a single message-passing step (an ordered concatenation
-of each node's neighbours and the connecting edge distances) followed by a
-multilayer perceptron. The single discriminative feature is the **centroid
-distance normalised by the sensor diagonal**: a fixed reference, identical in
-every scene, which is what carries the model from synthetic scenes to real
-images. Magnitude is deliberately discarded — the uncalibrated gap between
-catalogue magnitude and real instrumental flux makes it unreliable.
+**edges**, with full connectivity so the model sees the full pairwise geometry
+of the pattern; the GNN then labels each node with a catalogue star.
 
 <p align="center">
-  <img src="assets/top8_to_top4_graph.png" width="600" alt="Full connectivity: the model sees the full pairwise geometry of the pattern.">
+  <img src="assets/connectivity.png" width="430" alt="Full connectivity: a four-node tetrad has 6 edges and the eight-node top-8 graph has 28.">
+</p>
+
+The network is deliberately minimal — a single message-passing step that, for
+each node, concatenates its own features, the connecting edge distances and its
+neighbours, and maps the result through a multilayer perceptron. The single
+discriminative feature is the **centroid distance normalised by the sensor
+diagonal**: a fixed reference, identical in every scene, which is what carries
+the model from synthetic scenes to real images. Magnitude is deliberately
+discarded — the uncalibrated gap between catalogue magnitude and real
+instrumental flux makes it unreliable — so the node features are null and the
+discriminative signal is carried entirely by the edge distances.
+
+<p align="center">
+  <img src="assets/architecture.png" width="820" alt="The architecture as a single message-passing layer: the node, edge and neighbour features are concatenated into the input vector u_i and mapped by a 5-layer MLP to a score over the catalogue stars.">
 </p>
 
 The final formulation (**R3**) feeds the model variable-size graphs — the top-4
