@@ -115,22 +115,73 @@ two pipelines agree on the recovered attitude (median pointing separation
 `0.005°`). Training on **realistic** (rather than idealised) scenes is what
 closes the synthetic-to-real gap.
 
-## Reproduce
+---
 
-The whole pipeline — dataset generation, the closed-set split, GNN training,
-synthetic evaluation and the classical-vs-hybrid comparison — runs from a single
-entry point:
+## Reproducing the pipeline
+
+Synthetic dataset generation, the closed-set split, GNN training, synthetic
+evaluation and the classical-vs-hybrid comparison on real images all run from a
+single entry point:
 
 ```bash
 ./scripts/reproduce_thesis_pipeline.sh smoke   # wiring check on a workstation
 ./scripts/reproduce_thesis_pipeline.sh full    # thesis-scale run (HPC)
 ```
 
-The `smoke` mode checks that the pipeline is correctly wired; `full` reproduces
-the thesis dataset and training from the recorded seeds. The exact numbers behind
-the result tables are committed under [`results/`](results/) and can be
-re-checked without re-running the HPC pipeline. The canonical configuration is in
-[`configs/final_r3_synthd.yaml`](configs/final_r3_synthd.yaml).
+The `smoke` mode builds a small synthetic dataset, creates the split, trains the
+final R3 graph formulation for one epoch and evaluates it; it checks that the
+pipeline is correctly wired, not that it reproduces the thesis-scale numbers. The
+`full` mode regenerates the thesis dataset and trains the final model from the
+recorded seeds, and is HPC-scale. The exact numbers behind the result tables are
+committed under [`results/`](results/) and can be re-checked without re-running
+the HPC pipeline.
+
+If a trained checkpoint already exists, the real-image comparison can be run on
+its own:
+
+```bash
+export CHECKPOINT=/path/to/best_checkpoint.pt
+export REAL_IMAGE_ROOT=/path/to/imgs_teste
+./scripts/reproduce_thesis_pipeline.sh eval-real
+```
+
+## Final configuration
+
+The canonical configuration is recorded in
+[`configs/final_r3_synthd.yaml`](configs/final_r3_synthd.yaml) and matches
+Chapter 4 of the dissertation.
+
+**Dataset (Section 4.2).**
+
+- Tetra3 `default_database.npz`: the 8818-star `star_table` (Section 4.2.1), so
+  the model's classes are exactly the catalogue on which Tetra3 operates.
+- Sensor: `1280 × 960` px; field of view `17.2°` horizontal, `13.0°` vertical,
+  `21.0°` diagonal.
+- Final `synthD`: random-boresight scenes with coverage control inside a band of
+  the reference mean ± 500 appearances (Section 4.2.8).
+- Per-scene perturbations: 0–5 false detections, 0–5 dropped real stars, and a
+  per-point positional uncertainty between 0.25 and 1.0 px (Section 4.2.7).
+- `point_magnitude` stores the catalogue magnitude; magnitude perturbation is
+  disabled in the final dataset (hence the run name `run5_expD_all_rawmag`).
+- Seeds: split/training `12345`; star-centred reference `6353103531848264806`;
+  `synthD` `577215227560855758`.
+
+**GNN (Section 4.3).**
+
+- Regime R3: five graphs per scene, on the top-4 to top-8 brightest centroids.
+- Fully connected graphs; `edge_mlp` backbone; 5 layers, hidden dimension 512,
+  dropout 0.2.
+- No node features; the single edge feature is the centroid distance normalised
+  by the sensor diagonal.
+- AdamW, learning rate `1e-3`, weight decay `1e-5`, gradient clipping `1.0`;
+  early stopping on the validation loss with patience 40.
+
+**Tetra3 + GNN integration (Section 4.4).**
+
+- The GNN only generates attitude hypotheses; centroid extraction and the final
+  geometric verification remain Tetra3's.
+- Anchor-pair search: `M = 8` brightest centroids, `N = 8` anchors, `K = 10`
+  candidates per anchor, `B = 65` complete geometric verifications.
 
 ## Repository layout
 
@@ -149,3 +200,11 @@ The 147 real star-tracker images are **proprietary** and are not required for th
 `smoke` check. The multi-GB datasets and the trained checkpoints are catalogued
 in [`ARTIFACTS.md`](ARTIFACTS.md); the datasets are fully regenerable from the
 recorded seeds.
+
+## Environment
+
+The classical Tetra3 dependencies are in
+[`requirements.txt`](requirements.txt); the GNN training path additionally
+requires the packages listed in [`GNN/requirements.txt`](GNN/requirements.txt).
+The full dataset generation and training are HPC-scale, whereas the `smoke`
+pipeline is the recommended first check on a normal workstation.
