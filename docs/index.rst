@@ -3,7 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. include:: ../README.rst
+Deep learning enabled star tracker — Tetra3 + GNN. See the project ``README.md``
+for the overview, methodology and results.
 
 .. toctree::
    :maxdepth: 3
