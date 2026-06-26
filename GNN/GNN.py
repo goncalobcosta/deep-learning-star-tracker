@@ -37,7 +37,7 @@ DROPOUT = 0.2
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GRAPH_K_FORMULA = "min(max(3, round(0.25 * n)), 8)"
 GRAPH_CONNECTIVITY_CHOICES = ("knn", "fully")
-MODEL_BACKBONE_CHOICES = ("gatv2", "edge_mlp")
+MODEL_BACKBONE_CHOICES = ("gatv2", "edge_mlp", "nnconv")
 EARLY_STOP_MONITOR_CHOICES = (
     "val_loss",
     "val_top1_real",
@@ -1350,6 +1350,67 @@ class EdgeMLPStarGNN(nn.Module):
         return self.id_head(self._encode(x, edge_index, edge_attr, batch))
 
 
+class NNConvStarGNN(nn.Module):
+    """MPNN backbone using NNConv: message_ij = NN(e_ij) @ h_j.
+
+    Edge features modulate message content directly, breaking symmetry even with
+    identical node features (unlike GATv2Conv where edge features only affect attention).
+    """
+
+    def __init__(
+        self,
+        *,
+        in_dim: int,
+        edge_dim: int,
+        hidden_dim: int,
+        num_layers: int,
+        heads: int,
+        dropout: float,
+        num_id_classes: int,
+    ) -> None:
+        super().__init__()
+        ensure_pyg_available()
+        from torch_geometric.nn import NNConv
+
+        self.dropout = float(dropout)
+
+        self.input_proj = nn.Linear(in_dim, hidden_dim)
+        self.norms = nn.ModuleList([nn.LayerNorm(hidden_dim) for _ in range(num_layers)])
+        self.convs = nn.ModuleList(
+            [
+                NNConv(
+                    in_channels=hidden_dim,
+                    out_channels=hidden_dim,
+                    nn=nn.Sequential(
+                        nn.Linear(edge_dim, hidden_dim * hidden_dim),
+                        nn.ReLU(),
+                    ),
+                    aggr="mean",
+                )
+                for _ in range(num_layers)
+            ]
+        )
+        self.id_head = nn.Linear(hidden_dim, num_id_classes)
+
+    def _encode(self, x: torch.Tensor, edge_index: torch.Tensor, edge_attr: torch.Tensor) -> torch.Tensor:
+        h = self.input_proj(x)
+        for conv, norm in zip(self.convs, self.norms):
+            h = conv(h, edge_index, edge_attr)
+            h = F.relu(norm(h))
+            h = F.dropout(h, p=self.dropout, training=self.training)
+        return h
+
+    def forward(
+        self,
+        x: torch.Tensor,
+        edge_index: torch.Tensor,
+        edge_attr: torch.Tensor,
+        batch: torch.Tensor | None = None,
+    ) -> torch.Tensor:
+        h = self._encode(x, edge_index, edge_attr)
+        return self.id_head(h)
+
+
 def make_star_model(
     *,
     model_backbone: str,
@@ -1382,6 +1443,16 @@ def make_star_model(
             dropout=dropout,
             num_id_classes=num_id_classes,
             max_neighbors=int(max_neighbors),
+        )
+    if model_backbone == "nnconv":
+        return NNConvStarGNN(
+            in_dim=in_dim,
+            edge_dim=edge_dim,
+            hidden_dim=hidden_dim,
+            num_layers=num_layers,
+            heads=heads,
+            dropout=dropout,
+            num_id_classes=num_id_classes,
         )
     raise ValueError(f"Unsupported model_backbone: {model_backbone}")
 
@@ -1694,7 +1765,7 @@ def parser() -> argparse.ArgumentParser:
         help=(
             "Model backbone. 'gatv2' keeps the original PyG GATv2Conv model; "
             "'edge_mlp' builds explicit per-node inputs from node features, outgoing edge features, "
-            "and neighbour node features."
+            "and neighbour node features; 'nnconv' is an edge-conditioned message-passing baseline (PyG NNConv)."
         ),
     )
 
